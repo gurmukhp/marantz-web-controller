@@ -1,0 +1,13 @@
+{
+  "name": "marantz-night-mode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "marantz-denon-telnet": "0.0.11"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+}

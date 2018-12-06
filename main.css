@@ -1,0 +1,31 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #f5bb06;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  background-color: white;
+  text-align: center;
+  outline: none;
+  padding: 30px;
+  font-size: 35px;
+  -webkit-appearance: none;
+  border: 4px solid lightgrey;
+}
+
+.container {
+  background-color: white;
+  text-align: center;
+  outline: none;
+  padding: 30px;
+  font-size: 35px;
+}
