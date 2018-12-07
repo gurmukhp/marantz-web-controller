@@ -5,48 +5,86 @@ const Marantz = require('marantz-denon-telnet');
 class NightModeToggler {
   constructor() {
     this.marantzAvr = new Marantz('192.168.86.91');
-    this.enabled = false;
+    this.status;
     this.updateState();
   }
 
   updateState() {
-    this.isEnabled((enabled) => {
-      this.enabled = enabled;
+    this.getStatus((status) => {
+      this.nightModeEnabled = status.night;
+      this.enhanceVoiceEnabled = status.voice;
     });
   }
 
   /**
-   * If Bass is -6 then Night mode is on.
+   * Sync amp status locally.
    */
-  isEnabled(callback) {
-    this.marantzAvr.telnet('PSBAS ?', (error, response) => {
-      console.log(error);
+  getStatus(callback) {
+    this.status = {
+      voice: false,
+      night: false
+    };
+    // Check if Dynamic Eq is on.
+    this.marantzAvr.telnet('PSDYNEQ ?', (error, response) => {
       console.log(response);
-      if (response[0] === 'PSBAS 44') {
-        callback(true);
+      if (response[0] === 'PSDYNEQ ON') {
+        console.log('dyn eq is on');
+        // Do nothing
+        callback(this.status);
+      } else {
+        this.status.voice = true;
+        this.marantzAvr.telnet('PSBAS ?', (error, response) => {
+          if (response[0] === 'PSBAS 44') {
+            this.status.night = true;
+          }
+          callback(this.status);
+          console.log(this.status);
+        });
       }
-      else {
-        callback(false);
-      }
-    })
+    });
   }
 
-  enable() {
-    console.log('enable');
-    if (this.enabled) {
-      return;
+  // Sync local status to amp.
+  setStatus() {
+    console.log(this.status);
+    // Night: OFF and Voice: OFF
+    if (!this.status.night && !this.status.voice) {
+      this.marantzAvr.telnet('PSDYNEQ ON', (error, response) => {});
     }
-    this.marantzAvr.telnet('PSBAS 44', () => {});
-    this.enabled = true;
+    // Night: OFF and Voice: ON
+    else if (!this.status.night && this.status.voice) {
+      this.marantzAvr.telnet('PSDYNEQ OFF', (error, response) => {
+        this.marantzAvr.telnet('PSBAS 56', (error, response) => {});
+      });
+    }
+    // Night: ON and Voice: OFF OR Night: ON and Voice: ON
+    else {
+      this.marantzAvr.telnet('PSDYNEQ OFF', (error, response) => {
+        this.marantzAvr.telnet('PSBAS 44', (error, response) => {});
+      });
+    }
   }
 
-  disable() {
-    console.log('disable');
-    if (!this.enabled) {
-      return;
-    }
-    this.marantzAvr.telnet('PSBAS 56', () => {});
-    this.enabled = false;
+  enableVoice() {
+    this.status.voice = true;
+    console.log('enable voice', this.status);
+    this.setStatus();
+  }
+
+  disableVoice() {
+    this.status.voice = false;
+    console.log('disable voice', this.status);
+    this.setStatus();
+  }
+
+  enableNightMode() {
+    this.status.night = true;
+    this.setStatus();
+  }
+
+  disableNightMode() {
+    this.status.night = false;
+    this.setStatus();
   }
 }
 

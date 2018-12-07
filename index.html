@@ -16,6 +16,7 @@
       background-color: #f5bb06;
       text-align: center;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
@@ -36,6 +37,12 @@
       outline: none;
       padding: 30px;
       font-size: 35px;
+      width: 310px;
+      margin-top: 30px;
+    }
+
+    .container:first-child {
+      margin-top: 0;
     }
 
     /* The switch - the box around the slider */
@@ -109,31 +116,53 @@
   </style>
 </head>
 <body>
-  <!-- <h1 id="status">Night Mode</h1> -->
-  <!-- <button id="toggle"></button> -->
-  <!-- <button id="enable">Enable Night Mode</button>
-  <button id="disable">Disable Night Mode</button> -->
-
+  <div class="container">
+    <label class="switch">
+      <span>Enhance Voice</span>
+      <input type="checkbox" id="toggleVoice">
+      <span class="slider round"></span>
+    </label>
+  </div>
   <div class="container">
     <label class="switch">
       <span>Night Mode</span>
-      <input type="checkbox" id="toggle">
+      <input type="checkbox" id="toggleNightMode">
       <span class="slider round"></span>
     </label>
   </div>
   <script>
-    const toggleButton = document.getElementById('toggle');
+    const toggleVoice = document.getElementById('toggleVoice');
+    const toggleNightModeButton = document.getElementById('toggleNightMode');
     let nightModeEnabled;
+    let enhanceVoiceEnabled;
 
     fetch('/status').then((response) => {
       response.json().then((status) => {
-        nightModeEnabled = status.enabled;
-        toggleButton.checked = nightModeEnabled;
+        console.log(status);
+        enhanceVoiceEnabled = status.voice;
+        toggleVoice.checked = enhanceVoiceEnabled;
+
+        nightModeEnabled = status.night;
+        toggleNightModeButton.checked = nightModeEnabled;
+
         document.getElementsByClassName('slider')[0].classList.add('show');
+        document.getElementsByClassName('slider')[1].classList.add('show');
       });
     });
 
-    toggleButton.addEventListener('click', () => {
+    toggleVoice.addEventListener('click', () => {
+      if (enhanceVoiceEnabled !== undefined) {
+        if (enhanceVoiceEnabled) {
+          fetch('/disableVoice');
+        } else {
+          fetch('/enableVoice');
+        }
+        enhanceVoiceEnabled = !enhanceVoiceEnabled;
+        toggleNightModeButton.innerText = 'Night Mode: ' + ((enhanceVoiceEnabled) ? 'On' : 'Off');
+      }
+    });
+
+    toggleNightModeButton.addEventListener('click', () => {
       if (nightModeEnabled !== undefined) {
         if (nightModeEnabled) {
           fetch('/disableNightMode');
@@ -141,7 +170,7 @@
           fetch('/enableNightMode');
         }
         nightModeEnabled = !nightModeEnabled;
-        toggleButton.innerText = 'Night Mode: ' + ((nightModeEnabled) ? 'On' : 'Off');
+        toggleNightModeButton.innerText = 'Night Mode: ' + ((nightModeEnabled) ? 'On' : 'Off');
       }
     });
   </script>
