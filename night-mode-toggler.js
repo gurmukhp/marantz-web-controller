@@ -16,11 +16,13 @@ class NightModeToggler {
   }
 
   /**
-   * If MultiEq is OFF, then NightMode is enabled.
+   * If Bass is -6 then Night mode is on.
    */
   isEnabled(callback) {
-    this.marantzAvr.telnet('PSMULTEQ: ?', (error, response) => {
-      if (response[0] === 'PSMULTEQ:OFF') {
+    this.marantzAvr.telnet('PSBAS ?', (error, response) => {
+      console.log(error);
+      console.log(response);
+      if (response[0] === 'PSBAS 44') {
         callback(true);
       }
       else {
@@ -30,24 +32,20 @@ class NightModeToggler {
   }
 
   enable() {
+    console.log('enable');
     if (this.enabled) {
       return;
     }
-    this.marantzAvr.telnet('PSMULTEQ:OFF', () => {
-      this.marantzAvr.telnet('PSGEQ ON', () => {});
-    });
+    this.marantzAvr.telnet('PSBAS 44', () => {});
     this.enabled = true;
   }
 
   disable() {
+    console.log('disable');
     if (!this.enabled) {
       return;
     }
-    this.marantzAvr.telnet('PSGEQ OFF', () => {
-      this.marantzAvr.telnet('PSMULTEQ:FLAT', () => {
-        this.marantzAvr.telnet('PSDYNVOL LIT', () => {});
-      });
-    });
+    this.marantzAvr.telnet('PSBAS 56', () => {});
     this.enabled = false;
   }
 }
