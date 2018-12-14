@@ -60,6 +60,22 @@ app.get('*', function(req, res) {
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 lirc.init();
 
-lirc_node.addListener('KEY_1', 'LG_AKB73715601', (data) => {
-  console.log("Received IR keypress 'KEY_UP' from remote 'remote1'");
+// Disable Voice
+lirc.addListener('KEY_1', 'LG_AKB73715601', (data) => {
+  Marantz.enableVoice();
+}, 400);
+
+// Enable Voice
+lirc.addListener('KEY_2', 'LG_AKB73715601', (data) => {
+  Marantz.disableVoice();
+}, 400);
+
+// Enable Night Mode
+lirc.addListener('KEY_3', 'LG_AKB73715601', (data) => {
+  Marantz.enableNightMode();
+}, 400);
+
+// Disable Night Mode
+lirc.addListener('KEY_4', 'LG_AKB73715601', (data) => {
+  Marantz.disableNightMode();
 }, 400);
