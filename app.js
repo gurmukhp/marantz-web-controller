@@ -71,11 +71,11 @@ lirc.addListener('KEY_2', 'LG_AKB73715601', (data) => {
 }, 400);
 
 // Enable Night Mode
-lirc.addListener('KEY_3', 'LG_AKB73715601', (data) => {
+lirc.addListener('KEY_4', 'LG_AKB73715601', (data) => {
   Marantz.enableNightMode();
 }, 400);
 
 // Disable Night Mode
-lirc.addListener('KEY_4', 'LG_AKB73715601', (data) => {
+lirc.addListener('KEY_5', 'LG_AKB73715601', (data) => {
   Marantz.disableNightMode();
 }, 400);
