@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 const Marantz = require('./night-mode-toggler');
+const lirc = require('lirc_node');
 
 const port = 8080;
 
@@ -57,3 +58,8 @@ app.get('*', function(req, res) {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+lirc.init();
+
+lirc_node.addListener('KEY_1', 'LG_AKB73715601', (data) => {
+  console.log("Received IR keypress 'KEY_UP' from remote 'remote1'");
+}, 400);

@@ -1,9 +1,8 @@
-Start   - "sudo service marantz-night-mode start"
-Stop    - "sudo service marantz-night-mode stop"
-Status  - "sudo service marantz-night-mode status"
-Restart - "sudo service marantz-night-mode restart"
+using pm2 to run the app
+
+pm2 restart 0
+
+pm2 stop all
 
 
-
-Forever is to keep it running
-forever-service is what keeps it running after reboot.
+pm2 unstartup - prevent it from firing up on reboot

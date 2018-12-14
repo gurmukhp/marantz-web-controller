@@ -28,7 +28,6 @@ class NightModeToggler {
     this.marantzAvr.telnet('PSDYNEQ ?', (error, response) => {
       console.log(response);
       if (response[0] === 'PSDYNEQ ON') {
-        console.log('dyn eq is on');
         // Do nothing
         callback(this.status);
       } else {
@@ -38,7 +37,6 @@ class NightModeToggler {
             this.status.night = true;
           }
           callback(this.status);
-          console.log(this.status);
         });
       }
     });
@@ -46,7 +44,6 @@ class NightModeToggler {
 
   // Sync local status to amp.
   setStatus() {
-    console.log(this.status);
     // Night: OFF and Voice: OFF
     if (!this.status.night && !this.status.voice) {
       this.marantzAvr.telnet('PSDYNEQ ON', (error, response) => {});
@@ -67,13 +64,11 @@ class NightModeToggler {
 
   enableVoice() {
     this.status.voice = true;
-    console.log('enable voice', this.status);
     this.setStatus();
   }
 
   disableVoice() {
     this.status.voice = false;
-    console.log('disable voice', this.status);
     this.setStatus();
   }
 
