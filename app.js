@@ -7,6 +7,7 @@ const lirc = require('lirc_node');
 
 const port = 8080;
 
+// Returns landing page.
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
@@ -16,6 +17,19 @@ app.get('/main.css', (req, res) => {
   res.sendFile(path.join(__dirname + '/main.css'));
 });
 
+/**
+ * Returns initial status of Marantz amp so UI can be updated.
+ */
+app.get('/status', (req, res) => {
+  Marantz.getStatus((status) => {
+    res.contentType('application/json');
+    res.send(status);
+  });
+});
+
+/**
+ * Endpoints to modify Marantz amp.
+ */
 app.get('/enableVoice', (req, res) => {
   Marantz.enableVoice();
   res.send('enhance voice enabled');
@@ -36,28 +50,21 @@ app.get('/disableNightMode', (req, res) => {
   res.send('night mode disabled');
 });
 
-app.get('/status', (req, res) => {
-  Marantz.getStatus((status) => {
-    res.contentType('application/json');
-    res.send(status);
+app.get('*', function(req, res) {
+  fs.readFile('./' + req.params['0'], (err, data) => {
+    if (err) {
+      res.send('Oops! Couldn\'t find that file.');
+    } else {
+      res.contentType(req.params['0']);
+      res.send(data);
+    }
+    res.end();
   });
 });
 
-app.get('*', function(req, res) {
-  // Note: should use a stream here, instead of fs.readFile
-  fs.readFile('./' + req.params['0'], (err, data) => {
-    if(err) {
-      res.send("Oops! Couldn't find that file.");
-    } else {
-      // set the content type based on the file
-      res.contentType(req.params['0']);
-      res.send(data);
-    }   
-    res.end();
-  }); 
-});
+app.listen(port, () => console.log(`Marantz app listening on port ${port}!`));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// Sets up listening to commands from LG remote.
 lirc.init();
 
 // Disable Voice

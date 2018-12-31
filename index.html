@@ -45,7 +45,6 @@
       margin-top: 0;
     }
 
-    /* The switch - the box around the slider */
     .switch {
       position: relative;
       height: 34px;
@@ -54,14 +53,12 @@
       align-items: center;
     }
 
-    /* Hide default HTML checkbox */
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
 
-    /* The slider */
     .slider {
       position: absolute;
       cursor: pointer;
@@ -145,18 +142,16 @@
         nightModeEnabled = status.night;
         toggleNightModeButton.checked = nightModeEnabled;
 
-        document.getElementsByClassName('slider')[0].classList.add('show');
-        document.getElementsByClassName('slider')[1].classList.add('show');
+        const sliderElements = document.getElementsByClassName('slider');
+
+        sliderElements[0].classList.add('show');
+        sliderElements[1].classList.add('show');
       });
     });
 
     toggleVoice.addEventListener('click', () => {
       if (enhanceVoiceEnabled !== undefined) {
-        if (enhanceVoiceEnabled) {
-          fetch('/disableVoice');
-        } else {
-          fetch('/enableVoice');
-        }
+        fetch((enhanceVoiceEnabled) ? '/disableVoice' : '/enableVoice');
         enhanceVoiceEnabled = !enhanceVoiceEnabled;
         toggleNightModeButton.innerText = 'Night Mode: ' + ((enhanceVoiceEnabled) ? 'On' : 'Off');
       }
@@ -164,11 +159,7 @@
 
     toggleNightModeButton.addEventListener('click', () => {
       if (nightModeEnabled !== undefined) {
-        if (nightModeEnabled) {
-          fetch('/disableNightMode');
-        } else {
-          fetch('/enableNightMode');
-        }
+        fetch((nightModeEnabled) ? '/disableNightMode' : '/enableNightMode');
         nightModeEnabled = !nightModeEnabled;
         toggleNightModeButton.innerText = 'Night Mode: ' + ((nightModeEnabled) ? 'On' : 'Off');
       }
