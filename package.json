@@ -1,6 +1,6 @@
 {
   "name": "marantz-night-mode",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "app.js",
   "dependencies": {
@@ -10,5 +10,6 @@
   },
   "devDependencies": {},
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": ["node-js", "node", "marantz", "marantz-avr", "telnet", "html", "javascript", "css", "web", "infrared", "remote control", "ir", "lirc"]
 }
