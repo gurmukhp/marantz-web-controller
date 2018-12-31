@@ -12,7 +12,7 @@ Controls a Marantz AMP via Telnet by either a local web site or infrared command
 `node app.js`
 
 Visit `http://<localhost>:8080` which will show the available options to control the Marantz Amp:
-![Marantz Controller UI](screenshot.png)
+![Marantz Controller UI](https://raw.githubusercontent.com/gurmukhp/marantz-web-controller/master/screenshot.png)
 
 ### Infrared Control
 Install and configure LIRC for your system and update the listeners at the bottom of `app.js`
